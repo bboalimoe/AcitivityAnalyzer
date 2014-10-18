@@ -36,7 +36,7 @@ def get_ajax_source(url,data):
 	page=''
 	for i in xrange(maxTryTimes):
 		try:
-			req=urllib2.Request(url,post_data,headers)
+			req=urllib2.Request(url,data,headers) #change the post_data to data
 			page=urllib2.urlopen(req).read()
 			# page=urllib2.urlopen(url,timeout=1).read()
 		except:
