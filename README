@@ -7,3 +7,4 @@
 
 dependency:
 1.bidict: pip install
+2.bs4: download: http://www.crummy.com/software/BeautifulSoup/bs4/download/4.0/
