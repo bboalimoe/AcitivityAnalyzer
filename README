@@ -3,3 +3,7 @@
 1.damai.py,huodongxing.py,douban.py是活动的Crawler
 2.Avos_manager.py 是avos引用库
 3.Converter.py 是baidu地图经纬度与gps经纬度转换
+
+
+dependency:
+1.bidict: pip install
