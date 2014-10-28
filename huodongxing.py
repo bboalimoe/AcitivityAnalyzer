@@ -44,6 +44,7 @@ class HuodongxingSpider(object):
 			geoCodingDictJson = json.dumps(self.geoCodingDict,ensure_ascii=False)
 			fileInput.write(geoCodingDictJson)
 	'''
+	
 	def crawl(self):
 		for categoryCn in self.categoryList:
 			categoryUrl = "http://www.huodongxing.com/events?type=0&show=list&d=%s&tag=%s" % (self.timeType,categoryCn)
@@ -108,23 +109,12 @@ class HuodongxingSpider(object):
 						start_str = icon_timeList[0]
 						if start_str.count(":") == 1:
 							start_str += ":00"
-						date_utc = getUtcDate(start_str)
-						date_iso = date_utc.replace(" ","T") + ".000Z"
-						start_utc = timeConvet2utc(start_str)
-						start_iso = start_utc.replace(" ","T") + ".000Z"
-						
-							
 						if len(icon_timeList) > 1:
 							end_str = icon_timeList[1]
 						if end_str.count(":") == 1:
 							end_str += ":00"
-						end_utc = timeConvet2utc(end_str)
-						end_iso = end_utc.replace(" ","T") + ".000Z"
 
-						date_time = dict(__type='Date',iso=date_iso)
-						start_time = dict(__type='Date',iso=start_iso)
-						end_time = dict(__type='Date',iso=end_iso)
-						
+						date_time,start_time,end_time = getAvosTimeInfo(start_str, end_str)
 						
 						eventLocation = mediaInfoDict["icon-place"]
 						left_str = "（";
@@ -137,7 +127,7 @@ class HuodongxingSpider(object):
 					dataDict = {"name":eventTitle,"date":date_time,
 					"start_time":start_time,"end_time":end_time,"ticket":"","region":eventLocation,"longitude":longitude,"lattitude":latitude,"category":categoryCn}
 					try:
-						self.avosManager.saveData(self.avosClassName,dataDict)
+						self.avosManager.saveActivity(dataDict)
 					except:
 						print dataDict
 						print "avos exception! eventUrl:%s" % eventUrl

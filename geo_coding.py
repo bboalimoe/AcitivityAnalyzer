@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 from util_opt import *
 import re
+import json
+from avos_manager import *
 
 class GeoCoder(object):
 	def __init__(self):
@@ -14,8 +16,15 @@ class GeoCoder(object):
 			lat_1 = float(re.findall(r'(?<=lat\":)[^}]+(?=})', result_info)[0])
 		except:
 			return 0.0,0.0
+		#type
+		poiType = json.loads(result_info[27:-1])['result']['level']
+
 		#convert
 		lng,lat = self.convert(lng_1,lat_1)
+                #save to avos
+		dataDict = {'name':region,'type':poiType,'lattitude':lat,'longitude':lng}
+		avosManager = AvosManager()
+		avosManager.updateDataByName('poiClass',region,dataDict)
 		return lng,lat
 
 	def convert(self,lng_1,lat_1):
@@ -34,5 +43,5 @@ class GeoCoder(object):
 if __name__ == "__main__":
 	geo = GeoCoder()
 	region = "​中国票务在线上海站"
-	lng,lat = geo.geoCoding(region)
+	lng,lat=geo.geoCoding(region)
 	print lng,lat

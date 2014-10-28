@@ -10,12 +10,11 @@ def runCrawlers():
     damaiSpider = DamaiSpider()
     doubanSpider = DoubanSpider()
     huodongxingSpider = HuodongxingSpider()
-    #run crawlling using multi-threads
+    #crawling with multi-threads
     thread.start_new_thread(damaiSpider.crawl,())
     thread.start_new_thread(doubanSpider.crawl,())
     thread.start_new_thread(huodongxingSpider.crawl,())
 
 if __name__=="__main__":
-    runCrawlers()
     t = SchedTimer(24,00,00)
     t.start(runCrawlers)

@@ -15,44 +15,70 @@ headers = { 'User-Agent': ' Chrome/35.0.1916.114 Safari/537.36' }
 #global cj,opener,headers
 
 def get_source(url):
-	#time.sleep(0.5)
-	maxTryTimes = 5
-	page=''
-	for i in xrange(maxTryTimes):
-		try:
-			req=urllib2.Request(url,headers=headers)
-			page=urllib2.urlopen(req,timeout=10).read()
-			# page=urllib2.urlopen(url,timeout=1).read()
-		except:
-			print 'request again, retrytimes:%s' % i
-			time.sleep(0.5)
-			continue
-		break;
-	return page
+        #time.sleep(0.5)
+        maxTryTimes = 5
+        page=''
+        for i in xrange(maxTryTimes):
+                try:
+                        req=urllib2.Request(url,headers=headers)
+                        page=urllib2.urlopen(req,timeout=10).read()
+                        # page=urllib2.urlopen(url,timeout=1).read()
+                except:
+                        print 'request again, retrytimes:%s' % i
+                        time.sleep(0.5)
+                        continue
+                break;
+        return page
 
 def get_ajax_source(url,data):
-	#time.sleep(0.5)
-	maxTryTimes = 2
-	page=''
-	for i in xrange(maxTryTimes):
-		try:
-			req=urllib2.Request(url,data,headers) #change the post_data to data
-			page=urllib2.urlopen(req).read()
-			# page=urllib2.urlopen(url,timeout=1).read()
-		except:
-			print 'click problem, retrytimes:%s' % i
-			time.sleep(0.1)
-			continue
-		break;
-	return page
+        #time.sleep(0.5)
+        maxTryTimes = 2
+        page=''
+        for i in xrange(maxTryTimes):
+                try:
+                        req=urllib2.Request(url,post_data,headers)
+                        page=urllib2.urlopen(req).read()
+                        # page=urllib2.urlopen(url,timeout=1).read()
+                except:
+                        print 'click problem, retrytimes:%s' % i
+                        time.sleep(0.1)
+                        continue
+                break;
+        return page
 
 def timeConvet2utc(beijingTimeStr):
-	datetimeTmp = datetime.datetime.strptime(beijingTimeStr,"%Y-%m-%d %H:%M:%S")
-	utcTimeStr = (datetimeTmp - datetime.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
-	return utcTimeStr
+        datetimeTmp = datetime.datetime.strptime(beijingTimeStr,"%Y-%m-%d %H:%M:%S")
+        utcTimeStr = (datetimeTmp - datetime.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
+        return utcTimeStr
 
 def getUtcDate(beijingTimeStr):
-	date_str = "%s 00:00:00" % beijingTimeStr.split(" ")[0]
-	datetimeTmp = datetime.datetime.strptime(date_str,"%Y-%m-%d %H:%M:%S")
-	utcTimeStr = (datetimeTmp - datetime.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
-	return utcTimeStr
+        date_str = "%s 00:00:00" % beijingTimeStr.split(" ")[0]
+        datetimeTmp = datetime.datetime.strptime(date_str,"%Y-%m-%d %H:%M:%S")
+        utcTimeStr = (datetimeTmp - datetime.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
+        return utcTimeStr
+
+#By Zhong.zy, Get time info by avos format
+def getAvosTimeInfo(startTime,endTime=''):
+        #convert date
+        date_utc = getUtcDate(startTime)
+        date_iso = date_utc.replace(" ","T") + ".000Z"
+        date_time = dict(__type='Date',iso=date_iso)
+        #convert start time
+        start_utc = timeConvet2utc(startTime)
+        start_iso = start_utc.replace(" ","T") + ".000Z"
+        start_time = dict(__type='Date',iso=start_iso)
+        #convert end time if exist
+        if endTime:
+                end_utc = timeConvet2utc(endTime)
+                end_iso = end_utc.replace(" ","T") + ".000Z"
+                end_time = dict(__type='Date',iso=end_iso)
+                return date_time, start_time, end_time
+        
+        return date_time, start_time
+
+if __name__=='__main__':
+        a,b=getAvosTimeInfo('2014-10-11 11:12:32')
+        print a,b
+        
+
+        

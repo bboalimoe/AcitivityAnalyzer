@@ -76,20 +76,13 @@ class DoubanSpider(object):
 							longitude,latitude = lng,lat = self.geoCoder.geoCoding(eventLocation)
 						ticketFee = eventInfo.find(attrs={'class':'fee'}).get_text().strip().encode('utf-8')
 						
-						date_utc = getUtcDate(eventTimeDict["startDate"])
-						date_iso = date_utc.replace(" ","T") + ".000Z"
-						start_utc = timeConvet2utc(eventTimeDict["startDate"])
-						start_iso = start_utc.replace(" ","T") + ".000Z"
-						end_utc = timeConvet2utc(eventTimeDict["endDate"])
-						end_iso = end_utc.replace(" ","T") + ".000Z"
-						
-						date_time = dict(__type='Date',iso=date_iso)
-						start_time = dict(__type='Date',iso=start_iso)
-						end_time = dict(__type='Date',iso=end_iso)
+						date_time, start_time, end_time =
+                                                                getAvosTimeInfo(eventTimeDict["startDate"], eventTimeDict["endDate"])
+
 						dataDict = {"name":eventTitle,"date":date_time,
 						"start_time":start_time,"end_time":end_time,"ticket":ticketFee,"region":eventLocation,"longitude":longitude,"lattitude":latitude,"category":categoryCn}
 						try:
-							self.avosManager.saveData(self.avosClassName,dataDict)
+							self.avosManager.saveActivity(dataDict)
 						except:
 							print "avos exception!"
 							continue
