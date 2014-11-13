@@ -10,7 +10,8 @@ from avos_manager import *
 class PoiGenerator(object):
         def __init__(self):
                 self.avos = AvosManager()
-                
+
+
         def addPoi(self,name,username,lat,lng):
                 user = dict(__type='Pointer',className='_User',
                         objectId=self.avos.getUserIdByName(username))
