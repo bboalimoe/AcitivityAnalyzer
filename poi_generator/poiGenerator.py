@@ -21,6 +21,10 @@ class PoiGenerator(object):
                 objId = self.avos.getIdByCondition('poiGroup',lattitude=lat,longitude=lng)
                 self.avos.deleteData('poiGroup',objId)
 
+
+
+
+
 if __name__ == '__main__':
         poi = PoiGenerator()
 
